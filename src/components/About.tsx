@@ -32,7 +32,7 @@ const About = () => {
             <h2 className="text-4xl lg:text-5xl font-garamond font-bold text-foreground mb-6">
               About Me
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-cardinal to-usc-gold mx-auto mb-8"></div>
+            <div className="ornate-divider w-32 mx-auto mb-8"></div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -58,14 +58,14 @@ const About = () => {
             {/* Stats Cards */}
             <div className="space-y-6">
               {stats.map((stat, index) => (
-                <Card key={index} className="border-none shadow-lg hover:shadow-xl smooth-transition">
+                <Card key={index} className="luxury-card border-none shadow-xl hover:shadow-2xl smooth-transition versace-glow">
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-muted rounded-lg">
+                      <div className="p-3 bg-gradient-to-br from-usc-gold/10 to-cardinal/5 rounded-lg border border-usc-gold/20">
                         {stat.icon}
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground font-medium">{stat.title}</p>
+                        <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">{stat.title}</p>
                         <h4 className="text-xl font-garamond font-bold text-foreground">
                           {stat.value}
                         </h4>
