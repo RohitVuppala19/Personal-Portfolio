@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# TypeScript incremental build state
+*.tsbuildinfo
+
+# Local agent/tooling state
+.claude/

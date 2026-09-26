@@ -14,8 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        'garamond': ['Garamond', 'serif'],
-        'lato': ['Lato', 'sans-serif'],
+        'figtree': ['Figtree', 'sans-serif'],
+        'manrope': ['Manrope', 'sans-serif'],
+        'taviraj': ['Taviraj', 'serif'],
+        'inter-display': ['"Inter"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

@@ -2,9 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import USC theme fonts */
-@import url('https://fonts.googleapis.com/css2?family=Garamond:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+/* Fonts are loaded via <link> tags in index.html (CSS @import after
+   @tailwind is invalid and gets dropped by the bundler). */
 
 /* USC Portfolio Design System */
 @layer base {
@@ -134,131 +133,77 @@
   }
 
   body {
-    @apply bg-background text-foreground font-lato;
+    @apply bg-background text-foreground font-manrope;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-garamond;
+
+  @media (pointer: fine) {
+    * {
+      cursor: none !important;
+    }
   }
 }
 
 @layer components {
-  .hero-section {
-    background: var(--gradient-hero);
-    box-shadow: var(--shadow-elegant);
-  }
-  
-  .versace-hero {
-    background: var(--gradient-luxury);
-    box-shadow: var(--shadow-luxury);
-    position: relative;
-  }
-  
-  .versace-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(45deg, transparent 49%, hsl(var(--usc-gold) / 0.1) 50%, transparent 51%),
-                linear-gradient(-45deg, transparent 49%, hsl(var(--cardinal-red) / 0.05) 50%, transparent 51%);
-    background-size: 20px 20px;
-    pointer-events: none;
-  }
-  
-  .greek-key-border {
-    border: 3px solid;
-    border-image: linear-gradient(45deg, hsl(var(--usc-gold)), hsl(var(--cardinal-red)), hsl(var(--usc-gold))) 1;
-    position: relative;
-  }
-  
-  .greek-key-border::before {
-    content: '';
-    position: absolute;
-    inset: -6px;
-    background: repeating-linear-gradient(
-      0deg,
-      hsl(var(--usc-gold) / 0.1) 0px,
-      hsl(var(--usc-gold) / 0.1) 2px,
-      transparent 2px,
-      transparent 8px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      hsl(var(--cardinal-red) / 0.1) 0px,
-      hsl(var(--cardinal-red) / 0.1) 2px,
-      transparent 2px,
-      transparent 8px
-    );
-    pointer-events: none;
-    z-index: -1;
-  }
-  
-  .gold-accent {
-    background: var(--gradient-accent);
-    box-shadow: var(--shadow-gold);
-  }
-  
-  .cardinal-glow {
-    box-shadow: var(--shadow-cardinal);
-  }
-  
-  .versace-glow {
-    box-shadow: var(--shadow-versace);
-  }
-  
-  .luxury-card {
-    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--card) / 0.95) 100%);
-    border: 1px solid hsl(var(--usc-gold) / 0.2);
-    box-shadow: var(--shadow-luxury);
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .luxury-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, hsl(var(--usc-gold) / 0.1), transparent);
-    transition: left 0.8s ease;
-  }
-  
-  .luxury-card:hover::before {
-    left: 100%;
-  }
-  
   .smooth-transition {
     transition: var(--transition-smooth);
   }
-  
-  .bounce-transition {
-    transition: var(--transition-bounce);
+}
+
+/* Project modal ---------------------------------------------------------- */
+
+@layer components {
+  /* Reserve the scrollbar's width at all times, so revealing it mid-scroll
+     doesn't shift the write-up sideways. */
+  .modal-scroll-container {
+    scrollbar-gutter: stable;
   }
-  
-  .ornate-divider {
-    height: 2px;
-    background: var(--gradient-versace);
-    position: relative;
+
+  .modal-scroll-container::-webkit-scrollbar {
+    width: 12px;
   }
-  
-  .ornate-divider::before,
-  .ornate-divider::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 20px;
-    height: 20px;
-    background: var(--gradient-luxury);
-    border-radius: 50%;
-    transform: translateY(-50%);
+
+  .modal-scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+    /* Clear of the panel's rounded corners. */
+    margin-block: 26px;
   }
-  
-  .ornate-divider::before {
-    left: -10px;
+
+  .modal-scroll-container::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    transition: background-color 0.3s;
   }
-  
-  .ornate-divider::after {
-    right: -10px;
+
+  /* Only while the panel is moving — .is-scrolling is set by ProjectModal. */
+  .modal-scroll-container.is-scrolling::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--foreground) / 0.2);
+  }
+
+  .modal-scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--foreground) / 0.3);
+  }
+
+  /* Sections lift into place as they enter the panel's scroll viewport. The
+     page-level [data-reveal] can't do this — its trigger is the window. */
+  .modal-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    backface-visibility: hidden;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+
+  .modal-reveal.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .modal-reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
   }
 }

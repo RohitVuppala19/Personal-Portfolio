@@ -1,8 +1,31 @@
-import { Button } from "@/components/ui/button";
-import { Download, ArrowDown } from "lucide-react";
-import versaceBackground from "@/assets/versace-usc-bg.jpg";
+import { useEffect, useRef } from "react";
+import heroPoster from "@/assets/Rohit_Vuppala_Profile.jpg";
+
+// Drop a looping clip at public/hero.mp4 and it takes over automatically.
+// Until then (or if it fails to load) the poster image below is what shows.
+const HERO_VIDEO = "/hero.mp4";
 
 const Hero = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // React can miss the muted property on first render, and autoplay is
+    // blocked without it.
+    video.muted = true;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      video.pause();
+      return;
+    }
+
+    // Some browsers reject the promise if the file is missing — the poster
+    // stays up in that case, which is the fallback we want anyway.
+    void video.play().catch(() => {});
+  }, []);
+
   const scrollToProjects = () => {
     const element = document.querySelector("#projects");
     if (element) {
@@ -10,109 +33,59 @@ const Hero = () => {
     }
   };
 
-  const downloadResume = () => {
-    // Placeholder for resume download functionality
-    console.log("Downloading resume...");
-  };
-
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden versace-hero">
-      {/* Versace-USC Background */}
-      <div 
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `url(${versaceBackground})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-cardinal/85 via-deep-cardinal/80 to-usc-gold/15" />
-        {/* Luxury overlay pattern */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-usc-gold/10 to-transparent animate-luxury-glow"></div>
-        </div>
-      </div>
+    <section className="w-full px-[30px] pt-[85px] pb-[30px]">
+      <div className="relative w-full h-[calc(100vh-115px)] rounded-[4px] overflow-hidden">
+        {/* Full-bleed media */}
+        <video
+          ref={videoRef}
+          src={HERO_VIDEO}
+          poster={heroPoster}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
 
-      <div className="container mx-auto px-4 z-10 relative">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Profile Image with Greek Key Border */}
-          <div className="flex justify-center lg:justify-end order-2 lg:order-1">
-            <div className="relative">
-              <div className="w-80 h-80 rounded-full bg-gradient-to-br from-usc-gold via-warm-gold to-secondary p-2 greek-key-border animate-versace-pulse">
-                <div className="w-full h-full rounded-full bg-card/95 backdrop-blur-sm flex items-center justify-center luxury-card">
-                  <div className="text-6xl font-garamond text-cardinal font-bold tracking-wider">RV</div>
-                </div>
-              </div>
-              {/* Ornate decorative elements */}
-              <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-usc-gold/30 to-cardinal/20 rounded-full blur-2xl animate-luxury-glow"></div>
-              <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-gradient-to-tr from-cardinal/25 to-usc-gold/15 rounded-full blur-3xl animate-pulse"></div>
-              
-              {/* Greek key corner decorations */}
-              <div className="absolute -top-4 -left-4 w-8 h-8 border-l-2 border-t-2 border-usc-gold"></div>
-              <div className="absolute -top-4 -right-4 w-8 h-8 border-r-2 border-t-2 border-cardinal"></div>
-              <div className="absolute -bottom-4 -left-4 w-8 h-8 border-l-2 border-b-2 border-cardinal"></div>
-              <div className="absolute -bottom-4 -right-4 w-8 h-8 border-r-2 border-b-2 border-usc-gold"></div>
-            </div>
+        {/* Legibility scrim */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/45" />
+
+        {/* Overlay content */}
+        <div className="absolute inset-0 flex flex-col items-center justify-between px-[30px] pt-[40px] pb-[30px]">
+          {/* Top labels */}
+          <div className="w-full flex items-start justify-between gap-[5px]">
+            <button
+              onClick={scrollToProjects}
+              className="font-taviraj italic font-light text-white text-left text-[12px] tracking-[-0.04em] sm:text-[16px] sm:tracking-[-0.07em] leading-[1.6em]"
+            >
+              [Scroll to know me better]
+            </button>
+            <p className="font-taviraj italic font-light text-white text-right text-[12px] tracking-[-0.04em] sm:text-[16px] sm:tracking-[-0.07em] leading-[1.6em]">
+              [Based in Los Angeles, CA]
+            </p>
           </div>
 
-          {/* Hero Content with Luxury Styling */}
-          <div className="text-center lg:text-left order-1 lg:order-2 text-white">
-            <div className="relative">
-              <p className="text-usc-gold font-medium mb-4 tracking-[0.3em] uppercase text-sm animate-fade-in">
-                Hello, I'm
-              </p>
-              <h1 className="text-5xl lg:text-7xl font-garamond font-bold mb-6 leading-tight bg-gradient-to-r from-white via-usc-gold to-white bg-clip-text text-transparent animate-scale-in">
-                Rohit Vuppala
+          {/* Center wordmark */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="py-1">
+              <h1 className="font-taviraj italic font-light text-white text-center text-[clamp(40px,6vw,70px)] tracking-[-0.04em] leading-[0.9em]">
+                rohit vuppala
               </h1>
-              <div className="ornate-divider w-32 mx-auto lg:mx-0 mb-6"></div>
-              <h2 className="text-xl lg:text-2xl text-gray-200 mb-6 font-lato tracking-wide">
-                USC Engineering Management | Data & Product Analyst
-              </h2>
-              <p className="text-lg lg:text-xl text-gray-300 mb-10 max-w-2xl leading-relaxed font-light">
-                Building data tools and product workflows that drive real-world decisions.
-              </p>
-
-              {/* Luxury CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start">
-                <Button
-                  onClick={scrollToProjects}
-                  variant="gold"
-                  size="xl"
-                  className="text-lg px-10 py-7 rounded-full font-medium shadow-2xl hover:shadow-luxury versace-glow bounce-transition relative overflow-hidden group"
-                >
-                  <span className="relative z-10">View Projects</span>
-                  <ArrowDown className="ml-3 h-6 w-6 relative z-10 group-hover:animate-bounce" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-cardinal/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </Button>
-                <Button
-                  onClick={downloadResume}
-                  variant="outline"
-                  size="xl"
-                  className="text-lg px-10 py-7 rounded-full font-medium border-2 border-usc-gold/80 text-usc-gold hover:bg-usc-gold hover:text-foreground shadow-2xl hover:shadow-versace bounce-transition backdrop-blur-sm bg-white/5"
-                >
-                  <span className="relative z-10">Download Resume</span>
-                  <Download className="ml-3 h-6 w-6 relative z-10" />
-                </Button>
-              </div>
             </div>
+            <p className="font-taviraj italic font-light text-white text-center text-[clamp(15px,1.7vw,20px)] tracking-[-0.06em] leading-[1.6em]">
+              turning data into decisions
+            </p>
           </div>
-        </div>
 
-        {/* Ornate Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <div className="flex flex-col items-center space-y-2 animate-bounce">
-            <div className="w-1 h-8 bg-gradient-to-b from-usc-gold to-transparent rounded-full"></div>
-            <ArrowDown className="h-6 w-6 text-usc-gold animate-pulse" />
-          </div>
+          {/* Bottom label */}
+          <p className="font-taviraj italic font-light text-white text-center text-[12px] tracking-[-0.03em] sm:text-[16px] sm:tracking-[-0.05em] leading-[1.5em]">
+            [currently @ emi advisors, usc mann]
+          </p>
         </div>
       </div>
-
-      {/* Luxury corner decorations */}
-      <div className="absolute top-0 left-0 w-32 h-32 border-l-4 border-t-4 border-usc-gold/30 pointer-events-none"></div>
-      <div className="absolute top-0 right-0 w-32 h-32 border-r-4 border-t-4 border-cardinal/30 pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-32 h-32 border-l-4 border-b-4 border-cardinal/30 pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-32 h-32 border-r-4 border-b-4 border-usc-gold/30 pointer-events-none"></div>
     </section>
   );
 };
